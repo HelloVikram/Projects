@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpenseTracker</title>
+</head>
+<body>
+    <form>
+        <label for="amount">Expense amount</label>
+        <input type="number" name="amount" id="amount">
+        <label for="description">Expense description</label>
+        <input type="text" name="description" id="description">
+        <label for="category">Expense category</label>
+        <select name="category" id="category">
+            <option value="Movie">Movie</option>
+            <option value="Education">Education</option>
+            <option value="Fuel">Fuel</option>
+            <option value="Food">Food</option>
+            <option value="Electricity">Electricity</option>
+        </select>
+        <button type="submit">Add Expense</button>
+    </form>
+    <ul></ul>
+<script >
+    const formsubmit=document.querySelector('form');
+formsubmit.addEventListener('submit',(event)=>{
+    event.preventDefault();
+    const amt=event.target.amount.value;
+    const des=event.target.description.value;
+    const cat=event.target.category.value;
+    const obj={
+        amount:amt,
+        desciption:des,
+        category:cat
+    }
+    localStorage.setItem(obj.desciption,JSON.stringify(obj));
+    showItems(obj);
+    document.getElementById('amount').value="";
+    document.getElementById('description').value="";
+    document.getElementById('category').value="";
+})
+function showItems(obj){
+    const Li=document.querySelector('ul');
+    const newLi=document.createElement('li');
+    newLi.textContent=obj.amount+'-'+obj.desciption+'-'+obj.category;
+    const dltbtn=document.createElement('button');
+    dltbtn.textContent='Delete Expense';
+    dltbtn.type="button";
+    dltbtn.id="dlt";
+    newLi.appendChild(dltbtn);
+    const edtbtn=document.createElement('button');
+    edtbtn.textContent='Edit Expense';
+    edtbtn.type='button';
+    edtbtn.id='edt';
+    newLi.appendChild(edtbtn);
+    Li.appendChild(newLi);
+    dltbtn.addEventListener('click',(event)=>{
+        event.preventDefault();
+        const parenElem=event.target.parentElement;
+        parenElem.remove();
+        localStorage.removeItem(obj.desciption);
+    })
+    edtbtn.addEventListener('click',(event)=>{
+        event.preventDefault();
+        const Amt=document.getElementById('amount');
+        const Des=document.getElementById('description');
+        const Cat=document.getElementById('category');
+        Amt.value=obj.amount;
+        Des.value=obj.desciption;
+        Cat.value=obj.category;
+        const parenElem=event.target.parentElement;
+        parenElem.remove();
+        localStorage.removeItem(obj.desciption);
+    })
+}
+</script>   
+</body>
+</html>
